@@ -7,51 +7,44 @@
  */
  // Write your tests here!
  
-const caesarShift = require("../src/caesar");
-const expect = require("chai").expect;
-
-describe("caesarShift", () => {
-
-    it("should return false if shift equal to 0", () => {
-      const expected = false;
-      const actual = caesarShift("random text", 0);
-      expect(actual).to.equal(expected);
-    });
-
-    it("should return false if shift value is not defined", () => {
-        const expected = false;
-        const actual = caesarShift("random text");
-        expect(actual).to.equal(expected);
-      });
-
-    it("should return false if shift value is less than -25", () => {
-        const expected = false;
-        const actual = caesarShift("random text", -26);
-    expect(actual).to.equal(expected);
-    });
-
-    it("should return false if shift value is greater than 25", () => {
-        const expected = false;
-        const actual = caesarShift("random text",26);
-        expect(actual).to.equal(expected);
-    });
-
-    it("Encoding: should maintain spaces and special symbols", () => {
-        const expected = "bpqa qa i amkzmb umaaiom!";
-        const actual = caesarShift("This is a secret message!", 8);
-        expect(actual).to.equal(expected);
-    });
-
-    it("Decoding: should maintain spaces and special symbols", () => {
-        const expected = "this is a secret message!";
-        const actual = caesarShift("BPQA qa I amkzmb umaaiom!", 8, false);
-        expect(actual).to.equal(expected);
-    });
-
-    it("Should treat capital letters as lower case letters", () => {
-    const upperCase = caesarShift("Hello WORLD", 0);
-    const lowerCase = caesarShift("hello world", 0);
-    expect(upperCase).to.equal(lowerCase);
-    });
-    
-});
+ const {caesar} = require('../src/caesar.js');
+ const expect = require('chai').expect;
+ 
+ describe('Caesar shift', () => {
+     it(`return false if shift is 0, < -25, >25`, () => {
+         let actual =( caesar("thinkful", 0) || caesar("thinkful", -26) || caesar("thinkful",  26));
+        // let expected = false;
+         expect(actual).to.be.false;
+     })
+     
+     it(`ignores capital letters and handles past the letter z`, () => {
+         let actual = (caesar("Zebra Magazine", 3));
+         let expected = 'cheud pdjdclqh';
+         expect(actual).to.equal(expected);
+     })
+     
+     it(`(thinkful, 3) should be: wklqnixo`, () => {
+         let actual = caesar("thinkful", 3)
+         let expected = 'wklqnixo';
+         expect(actual).to.equal(expected);
+     })
+     
+     it(`(thinkful, 3, false) should be: thinkful`, () => {
+         let actual = caesar("wklqnixo", 3, false);
+         let expected = 'thinkful';
+         expect(actual).to.equal(expected);
+     })
+     
+     it(`(This is a secret message!, 8) should be: bpqa qa i amkzmb umaaiom!`, () => {
+         let actual = caesar("This is a secret messge!", 8);
+         let expected = 'bpqa qa i amkzmb umaaom!';
+         expect(actual).to.equal(expected);
+     })
+     
+     it(`(thinkful) should be: false`, () => {
+         let actual = caesar("thinkful");
+         let expected = false;
+         expect(actual).to.eql(expected);
+     })
+        
+ })

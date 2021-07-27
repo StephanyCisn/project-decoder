@@ -3,29 +3,28 @@
 // Only add code (e.g., helper methods, variables, etc.) within the scope
 // of the anonymous function on line 6
 
-const caesarModule = (function () {
-  
-  function caesarShift(input, shift = 0, encode = true) { 
-    if (shift == 0 || shift > 25 || shift < -25) return false; 
-    input = input.toLowerCase();
-    const encodedMessage = [];
-    const alphabet = "abcdefghijklmnopqrstuvwxyz"; 
-    const searchArray = [...alphabet,...alphabet,...alphabet];
-    shift = (encode == true) ? shift : shift*(-1); 
-
-    for(letter of input){ 
-      const letterPosition = alphabet.indexOf(letter);
-      if (!alphabet.includes(letter)){
-        encodedMessage.push(letter);
-      } else {
-        encodedMessage.push(searchArray[letterPosition + 26 + shift]);
-      }
+function caesar(input, shift, encode = true) {
+  //defaults
+    if (!shift || shift > 25 || shift < -25){
+        return false;
     }
-    return encodedMessage.join("");
-  }
-  return {
-    caesarShift,
-  };
+    if (!encode) {shift *= -1};
+    // set up encode/decode and return
+    return input.toLowerCase().split('').map((letter) => {
+        if (letter.charCodeAt(0) < 97) {return letter};
+        let charNum = letter.charCodeAt(0) + parseInt(shift)
+        if (charNum > 122){
+            charNum = 96 + (charNum - 122)
+        }
+        else if(charNum < 97){
+            charNum += 26
+        } //after code range checks, submit codes
+              return String.fromCharCode(charNum)
+    }).join('');
+}
+return {
+  caesar,
+};
 })();
 
-module.exports = caesarModule.caesarShift;
+module.exports = { caesar: caesarModule.caesar };

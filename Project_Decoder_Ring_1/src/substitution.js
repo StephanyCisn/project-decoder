@@ -5,42 +5,37 @@
 
 const substitutionModule = (function () {
   // you can add any code you want within this function scope
-
-  function inputChecker(alphabet){
-    switch(true){
-      case (alphabet === undefined): //no alphabet passed
-        return false;
-      case (alphabet.length != 26): //alphabet has incorrect length
-        return false;
-      default: 
-        for (letter of alphabet){ 
-          if(alphabet.indexOf(letter) != alphabet.lastIndexOf(letter)) return false;
-      }
-    }
-  }
-
+   
+    
   function substitution(input, alphabet, encode = true) {
-    if (inputChecker(alphabet)===false) return false;
-    const originalAlphabet = "abcdefghijklmnopqrstuvwxyz "; 
-    const codeAlphabet = [...alphabet," "]; 
-    input = input.toLowerCase();
-    const code = [];
-
-    if (encode === true){
-      for (let i = 0; i < input.length; i++){
-        code.push(codeAlphabet[originalAlphabet.indexOf(input[i])]);
-      }
-    } else {
-      for (let i = 0; i < input.length; i++){
-        code.push(originalAlphabet[codeAlphabet.indexOf(input[i])]);
-      }
-    }
-    return code.join("");
+    //set defaults
+      if (!input || !alphabet || alphabet.length !== 26){return false};
+      if (Array.from(new Set(alphabet)).length !== 26){return false};
+//set variables
+      let abcs = 'abcdefghijklmnopqrstuvwxyz';
+      alphabet = alphabet.split('');
+      input = input.toLowerCase();
+      let subResult = {};
+      let decode = {};
+      let result = '';
+//forEach, map and arrow funct through
+      abcs.split('').forEach((letter, index) => {
+          subResult[letter] = alphabet[index];
+          decode[alphabet[index]] = letter;
+      })
+//if encode is false
+      if (!encode) subResult = decode;
+      input.split('').forEach(input => {
+          result += input === ' ' ? ' ' : subResult[input]
+      })
+//return it
+      return result;
   }
-
+//END OF SUBSTITUTION FUNCTION
+    
   return {
     substitution,
   };
 })();
 
-module.exports = substitutionModule.substitution;
+module.exports = { substitution: substitutionModule.substitution };

@@ -1,51 +1,39 @@
 // Write your tests here!
 
 
-const expect = require("chai").expect;
-const inputChecker = require("../src/substitution");
+const {substitution} = require("../src/substitution.js")
+const expect = require('chai').expect;
 
-describe("inputChecker", () => {
+describe('Substitution tests', () => {
     
-    it("Should return false if input was not provided", () => {
+    it('Encode, no spaces, handles capital letters', () => {
+        const actual = substitution("ThinkfuL", "xoyqmcgrukswaflnthdjpzibev");
+        const expected = "jrufscpw";
+        expect(actual).to.equal(expected);
+    })
+    
+    it('Encode, yet returns false for duplicate letters in given alphabet', () => {
+        const actual = substitution("thinkful", "xoyqmcgrukswaflnthdjpzippp");
         const expected = false;
-        const actual = inputChecker("message");
         expect(actual).to.equal(expected);
-      });
-
-    it("Should return false if alphabet was not provided", () => {
+    })
+    
+    it('return false if given alphabet is less than 26', () => {
+        const actual = substitution("thinkful", "xoyqmcgrukswaflnv");
         const expected = false;
-        const actual = inputChecker("message");
         expect(actual).to.equal(expected);
-      });
-
-    it("Should return false if alphabet is not exactly 26 characters long", () => {
-      const expected = false;
-      const actual = inputChecker("message", "plmoknijbuhvygctfxrdzeswaqaaaaa");
-      expect(actual).to.equal(expected);
-    });
-
-    it("Should return false if alphabet is not exactly 26 characters long", () => {
-        const expected = false;
-        const actual = inputChecker("message", "plmoknij");
+    })
+    
+    it('Encode, with spaces', () => {
+      const actual = substitution("You are an excellent spy", "xoyqmcgrukswaflnthdjpzibev");
+      const expected = 'elp xhm xf mbymwwmfj dne';
         expect(actual).to.equal(expected);
-    });
-
-    it("should return false if duplicate values found in the given alphabet", () => {
-        const expected = false;
-        const actual = inputChecker("message", "abcdefghijklmnopqrstuvwxyy");
+    })
+    
+    it('Decode, no spaces', () => {
+        const actual = substitution("jrufscpw", "xoyqmcgrukswaflnthdjpzibev", false);
+        const expected = "thinkful";
         expect(actual).to.equal(expected);
-    });
-
-    it("Encoding: should maintain spaces in the message", () => {
-        const expected = "elp xhm xf mbymwwmfj dne";
-        const actual = inputChecker("You are an excellent spy", "xoyqmcgrukswaflnthdjpzibev");
-        expect(actual).to.equal(expected);
-    });
-
-    it("Decoding", () => {
-        const expected = "message";
-        const actual = inputChecker("y&ii$r&", "$wae&zrdxtfcygvuhbijnokmpl", false);
-        expect(actual).to.equal(expected);
-    });
-
-});
+    })
+    
+})

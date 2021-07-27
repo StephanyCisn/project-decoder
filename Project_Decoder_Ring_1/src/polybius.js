@@ -7,135 +7,36 @@ const polybiusModule = (function () {
   // you can add any code you want within this function scope
 
   function polybius(input, encode = true) {
-    // your solution code here
-    const numbers= [
-     
-      "11",
-      "21",
-      "31",
-      "41",
-      "51",
-      "12",
-      "22",
-      "32",
-      "42",
-      "52",
-      "13",
-      "23",
-      "33",
-      "43",
-      "53",
-      "14",
-      "24",
-      "34",
-      "44",
-      "54",
-      "15",
-      "25",
-      "35",
-      "45",
-      "55",
-    ];
-    const letters = [
-     
-      "a",
-      "b",
-      "c",
-      "d",
-      "e",
-      "f",
-      "g",
-      "h",
-      "i/j",
-      "k",
-      "l",
-      "m",
-      "n",
-      "o",
-      "p",
-      "q",
-      "r",
-      "s",
-      "t",
-      "u",
-      "v",
-      "w",
-      "x",
-      "y",
-      "z",
-    ];
-    console.log(numbers.length);
-    console.log(letters.length);
-
-    if (encode) {
+// set objects for letter translation
+      let alpha = {
+          a: "11", b: "21", c: "31", d: "41", e: "51", f: "12", g: "22",
+          h: "32", i: "42", j: "42", k: "52", l: "13", m: "23", n: "33",
+          o: "43", p: "53", q: "14", r: "24", s: "34", t: "44", u: "54",
+          v: "15", w: "25", x: "35", y: "45", z: "55", [' ']: " "
+      };
       
-      let result = ""; 
-      let message = input.toLowerCase();
-      for (let text = 0; text < message.length; text++) {
-        
-        let letter = message[text];
-        console.log(`letter is ${letter}`);
-        if (letter.match(/[a-z]/)) {
-          
-          if (letter === "i" || letter === "j") {
-            result += "42"; //return 42 for instances of i and j
-          } else {
-            let num = leters.indexOf(letter); 
-            result += numbers[num];
-          }
-        } else {
-          result += letter; 
-        }
+      let decoded = {
+          11: "a", 12: "f", 13: "l", 14: "q", 15: "v", 21: "b", 22: "g",
+          23: "m", 24: "r", 25: "w", 31: "c", 32: "h", 33: "n", 34: "s",
+          35: "x", 41: "d", 42: "(i/j)", 43: "o", 44: "t", 45: "y",
+          51: "e", 52: "k", 53: "p", 54: "u", 55: "z", [' ']: " "
+      };
+//encode/decode
+      if (encode){
+          return input.split('').map(letter => {
+              return alpha[letter.toLowerCase()]
+          }).join('');
       }
-      return result; 
-    } else {
-     
-      let messageArr = input.split(" "); 
-      console.log(messageArr);
-      let lettersArr = [];
-      for (word of messageArr) {
-        lettersArr.push(word.match(/.{2}/g)); 
+      else {
+          if(input.replace(/\s/g,'').length %2 !== 0){return false}
+          return input.match(/[0-9]{2}|\s/g).map(number => {
+              return decoded[number]
+          }).join('')
       }
-      let isEven = messageArr.every((word) => word.length % 2 === 0); 
-
-      if (!isEven) {
- 
-        return false;
-      }
-      let finalArr = []; 
-      for (word of lettersArr) {
-       
-        let tempArr = [];
-        for (letter of word) {
-          if (letter === "42") {
-            tempArr.push("(i/j)"); //use i/j for 42
-          } else {
-            let num = numbers.indexOf(letter);
-            let something = letters[num];
-            tempArr.push(something); 
-          }
-        }
-        finalArr.push(tempArr);
-      }
-      
-      let decodedArr = [];
-      for (word of finalArr) {
-        let val = word.join(""); 
-        decodedArr.push(val);
-      }
-      console.log(decodedArr);
-      let final = decodedArr.join(" "); 
-      return final;
-    }
-
-   
   }
-
-  polybius("jiggle", true);
-
   return {
     polybius,
   };
 })();
 
-module.exports = polybiusModule.polybius;
+module.exports = { polybius: polybiusModule.polybius };
